@@ -1,0 +1,196 @@
+### .gitignore
+
+# References:  https://github.com/github/gitignore
+
+
+## Backups
+*~*
+*.bak
+*.backup
+
+## RCS
+.cvs/
+.git/
+.svn/
+
+## Directories
+bin/
+build/
+*[Dd]ebug*/
+obj/
+*[Rr]elease*/
+temp/
+tmp/
+
+## Executables
+*.app
+*.exe
+*.out
+
+## Compiled Object files
+*.com
+*.lo
+*.o
+*.obj
+*.slo
+
+## Shared libraries
+*.dll
+*.dylib
+*.so
+*.so.*
+
+## Static libraries
+*.a
+*.la
+*.lai
+*.lib
+
+## Compressed files
+*.7z
+*.bz2
+*.bzip
+*.gz
+*.iso
+*.jar
+*.lzma
+*.rar
+*.tar
+*.xz
+*.zip
+
+## Package management
+*.deb
+*.dmg
+*.egg
+*.gem
+*.rpm
+*.xpi
+
+## CMake
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+## Java
+*.class
+*.ear
+*.jar
+*.war
+
+## Qt
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+*-build-*
+
+## Autotools (automake, autoconf)
+Makefile.in
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+
+## Database
+*.sqlite
+# SQL Server files
+App_Data/*.mdf
+App_Data/*.ldf
+
+## Logs
+*.log
+
+## Images
+*.bmp
+*.gif
+*.jpeg
+*.jpg
+*.png
+*.tiff
+
+## OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.user
+
+## Other
+*.tmp
+*.swp
+
+## Netbeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+## Mac/OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+## XCode
+*.pbxuser
+*.mode2v3
+*.mode1v3
+*.perspective
+*.perspectivev3
+*~.nib
+xcuserdata
+project.xcworkspace
+
+## Windows / Visual Studio
+*.suo
+*.user
+*.sln.docstates
+x64/
+[Bb]in/
+[Oo]bj/
+[Bb]uild[Ll]og.*
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## UML
+UML/.*
+UML/Phoenix.vpp.working
+
+## Binary files
+src/logger/g3log/g2log-FATAL-contract
+src/logger/g3log/g2log-FATAL-sigsegv
+teamworkUser*.xml
+Phoenix.vpp.working*
