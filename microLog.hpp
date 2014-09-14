@@ -111,6 +111,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /*
 //+TODO
+    - Make microLog as compatible as possible (regarding logging syntax) with g3log.
     - Option to log the executable name; useful if the log server receives logs from multiple executables.
     - Store all the required details in a bit mask parameter.
 	- Test:
