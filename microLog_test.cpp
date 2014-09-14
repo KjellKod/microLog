@@ -10,37 +10,49 @@
 #define MICRO_LOG_MIN_LEVEL 4
 */
 
+#ifdef MICRO_LOG_TEST
+
 #define MICRO_LOG_ACTIVE 1
 #include "microLog.hpp"
 
 #include <iostream>
 
-using namespace uLog;
+uLOG_INIT;     // microLog initialization
 
-MICRO_LOG_INIT;
 
 int main()
 {
-//    MICRO_LOG_FORMAT();
+    uLOG_START_APP("myProg.log");
 
-//	MICRO_LOG_START("custom.log");
-	MICRO_LOG_START_APPEND("custom.log");
+    uLOG_DATE;              // date
+    uLOG_TITLES(info);		// columns' titles
 
-//+B	uLOG(std::cerr, 5) << "Test log message number " << 2 << " with value " << 3.141 << uLOGE;
+    uLog::MinLogLevel();
+    uLog::minLogLevel = info;
+    uLog::MinLogLevel();
 
-	uLOGB(5);		// separator
-	uLOGD(5);		// date
+    uLOG(info) << "Test log message number " << 2 << " with value " << 3.141 << uLOGE;
+    uLOG(detail) << "Log not generated." << uLOGE;
 
-	uLOG(5) << "Test log message number " << 2 << " with value " << 3.141 << uLOGE;
+    uLog::minLogLevel = warning;
+    uLog::MinLogLevel();
 
-	uLOG(warning) << "Log made of separate tokens... ";
-	uLOGT(warning) << "first token, ";
-	uLOGT(warning) << "last token" << uLOGE;
+    uLOG(warning) << "Log made of separate tokens... ";
+    uLOGT(warning) << "first token, ";
+    uLOGT(warning) << "last token" << uLOGE;
 
-	uLOG(error) << "Test log message number 1." << uLOGE;
-	
+    uLOG(info) << "Log not generated." << uLOGE;
+    uLOG(error) << "Test Log." << uLOGE;
+    uLOGL(detail, logQSExperiment) << "Test minimum log levels for specific code areas: not generated." << uLOGE;
+    uLOGL(error, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
+    uLOGL(info, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
+    uLOGL(detail, logGPSolver) << "Test minimum log levels for specific code areas." << uLOGE;
+
 	for(int i = 1; i < 10; ++i) {
 		uLOG(i) << "Test log message number " << i << " with value " << 1.23*i << uLOGE;
 	}
 
+    uLog::Statistics::Log();
 }
+
+#endif // MICRO_LOG_TEST
