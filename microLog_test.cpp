@@ -27,6 +27,8 @@ int main()
     uLOG_DATE;              // date
     uLOG_TITLES(info);		// columns' titles
 
+    uLog::LogLevels();
+
     uLog::MinLogLevel();
     uLog::minLogLevel = info;
     uLog::MinLogLevel();

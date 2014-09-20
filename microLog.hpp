@@ -1,7 +1,7 @@
 /**  microLog.hpp
  *
- *   Version 6.1.0
- *   2014.09.11
+ *   Version 6.1.1
+ *   2014.09.20
  *
  *   It was the smallest logger in the universe ...
  *   ... but it still fits in a single header ;-)
@@ -47,7 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     - A single file project (this one).
 	- There are no implementation files, so makefiles do not have to be touched.
-    - Thread safe.
+    - Thread safe (C++11 threads, Boost threads or pthread).
 	- It can be used when no debugger nor other logging system is available.
 	- No objects to be defined.
 	- To activate it, #define MICRO_LOG_ACTIVE.
@@ -112,12 +112,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
 //+TODO
     - Make microLog as compatible as possible (regarding logging syntax) with g3log.
-    - Option to log the executable name; useful if the log server receives logs from multiple executables.
+    --> Option to log the executable name; useful if the log server receives logs from multiple executables.
     - Store all the required details in a bit mask parameter.
 	- Test:
 		- Multithreading/C++11.
         - Multithreading/Boost.
-        - On Windows.
+        . On Windows.
     - In Windows, DLLs have troubles with static variables. Now static variables are removed when dealing with DLLs. Use dllexport/dllimport to fix this issue.
     - Log to multiple different log files simultaneously, with different log levels, details, ...
         - Tipically one of these files will be on ram-disk.
@@ -135,7 +135,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef MICRO_LOG_HPP
 #define MICRO_LOG_HPP
 
-#define MICRO_LOG_VERSION 6.1.0
+#define MICRO_LOG_VERSION 6.1.1
 
 // Standard threading libraries
 #define MICRO_LOG_SINGLE_THREAD  1
@@ -145,8 +145,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace uLog {
     // Log levels (a custom levels enum can be used)
-    enum       LogLevels          {  nolog = 0,  detail,     info,       warning,    error,      critical,   fatal     };
-    const char logLevelTags[7][9] { "  ----  ", "DETAIL  ", "INFO    ", "WARNING ", "ERROR   ", "CRITICAL", "FATAL   " };
+    static const int nLogLevels = 8;
+    enum             LogLevels                   {  nolog = 0, verbose,    detail,     info,       warning,    error,      critical,   fatal      };
+    const char       logLevelTags[nLogLevels][9] { "  ----  ", "VERBOSE ", "DETAIL  ", "INFO    ", "WARNING ", "ERROR   ", "CRITICAL", "FATAL   " };
 }
 
 // Import logger's configuration
@@ -186,9 +187,9 @@ namespace uLog {
 
     struct Statistics
     {
-        #ifndef DLL_LOGGER
+        #ifndef MICRO_LOG_DLL
         static int nLogs;
-        static int nNoLogs, nDetailLogs, nInfoLogs, nWarningLogs, nErrorLogs, nCriticalLogs, nFatalLogs;
+        static int nNoLogs, nVerboseLogs, nDetailLogs, nInfoLogs, nWarningLogs, nErrorLogs, nCriticalLogs, nFatalLogs;
         static int highestLevel;
         #endif
         static void Update(int level);
@@ -227,12 +228,12 @@ namespace uLog {
         // microLog initialization:
         // Use this macro once in the main()'s file at global scope
 
-        #ifndef DLL_LOGGER
+        #ifndef MICRO_LOG_DLL
             #define uLOG_INIT_0                                \
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 std::ofstream uLog::microLog_ofs;              \
-                int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
+                int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
                 int Statistics::highestLevel = 0
         #else
             #define uLOG_INIT_0                                \
@@ -326,19 +327,19 @@ namespace uLog {
 		}
 
         inline bool CheckLogLevel(int _level, int _localLevel = nolog)
-		{
-            #ifndef DLL_LOGGER
+        {
+            #ifndef MICRO_LOG_DLL
                 Statistics::Update(_level);
             #endif
 
-            if(_localLevel == nolog)
-                _localLevel = uLog::minLogLevel;
-
-            if((_level < uLog::minLogLevel && _level < _localLevel) || _level < MICRO_LOG_MIN_LEVEL)
+            if(_level < MICRO_LOG_MIN_LEVEL || _level < _localLevel)
                 return false;
 
-			return true;
-		}
+            if(_localLevel == nolog && _level < uLog::minLogLevel)
+                return false;
+
+            return true;
+        }
 
 		#if MICRO_LOG_DETAIL == 0
 			// level log
@@ -625,9 +626,15 @@ namespace uLog {
 			if(CheckLogLevel(level)) \
                 ofs << bar << endm
 
-        #ifndef DLL_LOGGER
+        #ifndef MICRO_LOG_DLL
+        void LogLevels() {
+            microLog_ofs << "Log levels: ";
+            for(size_t i = 0; i < nLogLevels; ++i) microLog_ofs << logLevelTags[i] << " ";
+            microLog_ofs << std::endl;
+        }
+
         void MinLogLevel() {
-            microLog_ofs << "Minimum log level to be logged: " << minLogLevel << "( nolog = 0, detail = 1, info = 2, warning = 3, error = 4, critical = 5, fatal = 6 )" << std::endl;
+            microLog_ofs << "Minimum log level to be logged: " << logLevelTags[minLogLevel] << std::endl;
         }
 
         void Statistics::Update(int level) {
@@ -635,6 +642,7 @@ namespace uLog {
             if(level > highestLevel) highestLevel = level;
             switch (level) {
             case nolog:    ++nNoLogs;       break;
+            case verbose:  ++nVerboseLogs;  break;
             case detail:   ++nDetailLogs;   break;
             case info:     ++nInfoLogs;     break;
             case warning:  ++nWarningLogs;  break;
@@ -653,10 +661,11 @@ namespace uLog {
                 << "\n\tNumber of 'warning' logs:  " << nWarningLogs
                 << "\n\tNumber of 'info' logs:     " << nInfoLogs
                 << "\n\tNumber of 'detail' logs:   " << nDetailLogs
+                << "\n\tNumber of 'verbose' logs:  " << nVerboseLogs
                 << "\n\tNumber of 'null' logs:     " << nNoLogs << std::endl;
             microLog_ofs << "Highest log level: " << highestLevel << std::endl;
         }
-        #endif // DLL_LOGGER
+        #endif // MICRO_LOG_DLL
 
 
 #else // MICRO_LOG_ACTIVE
@@ -673,12 +682,12 @@ namespace uLog {
 
 		inline nullstream& endm(nullstream& os) { return os; }
 
-        #ifndef DLL_LOGGER
+        #ifndef MICRO_LOG_DLL
             #define uLOG_INIT                                  \
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 nullstream uLog::microLog_ofs;                 \
-                int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
+                int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
                 int Statistics::highestLevel = 0;
         #else
             #define uLOG_INIT                                  \
@@ -712,7 +721,8 @@ namespace uLog {
         #define uLOGB_(ofs, level)           if(0) ofs
         #define uLOG_LEVEL                   if(0) microLog_ofs
 
-        #ifndef DLL_LOGGER
+        #ifndef MICRO_LOG_DLL
+        void LogLevels() {}
         void MinLogLevel() {}
         void Statistics::Update(int level) {}
         void Statistics::Log() {}

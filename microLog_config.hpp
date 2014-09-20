@@ -48,7 +48,7 @@ namespace uLog {
 
 /// Set this if the logger is in a DLL (to avoid static variables)
 #ifdef WIN32
-    #define DLL_LOGGER
+    #define MICRO_LOG_DLL
 #endif
 
 
