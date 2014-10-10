@@ -16,13 +16,20 @@
 #include "microLog.hpp"
 
 #include <iostream>
+#include <string>
 
 uLOG_INIT;     // microLog initialization
 
 
 int main()
 {
-    uLOG_START_APP("myProg.log");
+    std::string logPath;
+    logPath.append("/Volumes/ramdisk/");
+    logPath.append("myProg.log");
+
+    std::cout << "Log file path: " << logPath << std::endl;
+
+    uLOG_START_APP(logPath);
 
     uLOG_DATE;              // date
     uLOG_TITLES(info);		// columns' titles
