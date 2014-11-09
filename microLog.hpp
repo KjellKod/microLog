@@ -1,7 +1,7 @@
 /**  microLog.hpp
  *
- *   Version 6.1.1
- *   2014.09.20
+ *   Version 6.2
+ *   2014.11.09
  *
  *   It was the smallest logger in the universe ...
  *   ... but it still fits in a single header ;-)
@@ -113,7 +113,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //+TODO
     - Add log levels based on function names.
     - Make microLog as compatible as possible (regarding logging syntax) with g3log.
-    --> Option to log the executable name; useful if the log server receives logs from multiple executables.
     - Store all the required details in a bit mask parameter.
 	- Test:
 		- Multithreading/C++11.
