@@ -196,11 +196,9 @@ namespace uLog {
         static int nLogs;
         static int nNoLogs, nVerboseLogs, nDetailLogs, nInfoLogs, nWarningLogs, nErrorLogs, nCriticalLogs, nFatalLogs;
         static int highestLevel;
-        static std::string progName;
         #endif
         static void Update(int level);
         static void Log();
-        static void SetProgName(const std::string &_progName);
     };
     
     extern int minLogLevel;         // minimum level a message must have to be logged
@@ -671,10 +669,6 @@ namespace uLog {
                 << "\n\tNumber of 'verbose' logs:  " << nVerboseLogs
                 << "\n\tNumber of 'null' logs:     " << nNoLogs << std::endl;
             microLog_ofs << "Highest log level: " << highestLevel << std::endl;
-        }
-
-        void Statistics::SetProgName(const std::string &_progName) {
-            //+TODO
         }
 
         #endif // MICRO_LOG_DLL
