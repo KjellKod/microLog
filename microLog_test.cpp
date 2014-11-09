@@ -27,6 +27,7 @@ int main()
     logPath.append("/Volumes/ramdisk/");
     logPath.append("myProg.log");
 
+    std::cout << "Test version:  " << VERSION << std::endl;
     std::cout << "Log file path: " << logPath << std::endl;
 
     uLOG_START_APP(logPath);

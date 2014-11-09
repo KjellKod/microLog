@@ -12,8 +12,8 @@ set(PRJ microLog_test)
 
 project(${PRJ})
 
-set(VERSION 0.0.1)
-
+add_definitions(-DVERSION="0.0.1")
+add_definitions(-DMICRO_LOG_EXECUTABLE_NAME="${PRJ}")
 add_definitions(-DMICRO_LOG_TEST)
 
 # Specify the build type on the command line: Release, Debug, RelWithDebInfo, MinSizeRel

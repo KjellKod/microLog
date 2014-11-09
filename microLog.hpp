@@ -111,6 +111,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /*
 //+TODO
+    - Add log levels based on function names.
     - Make microLog as compatible as possible (regarding logging syntax) with g3log.
     --> Option to log the executable name; useful if the log server receives logs from multiple executables.
     - Store all the required details in a bit mask parameter.
@@ -163,6 +164,10 @@ namespace uLog {
     #include <string>
     #include <vector>
     
+    #ifndef MICRO_LOG_EXECUTABLE_NAME
+        #define MICRO_LOG_EXECUTABLE_NAME ""
+    #endif
+
     #if(MICRO_LOG_THREADING == MICRO_LOG_CPP11_THREAD)
         #include <mutex>
     #elif(MICRO_LOG_THREADING == MICRO_LOG_BOOST_THREAD)
@@ -191,9 +196,11 @@ namespace uLog {
         static int nLogs;
         static int nNoLogs, nVerboseLogs, nDetailLogs, nInfoLogs, nWarningLogs, nErrorLogs, nCriticalLogs, nFatalLogs;
         static int highestLevel;
+        static std::string progName;
         #endif
         static void Update(int level);
         static void Log();
+        static void SetProgName(const std::string &_progName);
     };
     
     extern int minLogLevel;         // minimum level a message must have to be logged
@@ -347,17 +354,17 @@ namespace uLog {
 			#define uLOG(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << logLevelTags[level] << ": "
+                    microLog_ofs << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
             #define uLOGL(level, localMinLevel) \
                 if(CheckLogLevel(level, localMinLevel)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << logLevelTags[level] << ": "
+                    microLog_ofs << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
             #define uLOG_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    ofs << logLevelTags[level] << ": "
+                    ofs << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
@@ -378,19 +385,19 @@ namespace uLog {
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                 << logLevelTags[level] << ": "
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
             #define uLOGL(level, localMinLevel) \
                 if(CheckLogLevel(level, localMinLevel)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                 << logLevelTags[level] << ": "
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
 			#define uLOG_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					    << logLevelTags[level] << ": "
+                        << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
@@ -411,7 +418,7 @@ namespace uLog {
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					             << logLevelTags[level] << " [" \
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" \
 					             << (strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__) \
 					             << ":" << __func__ << ":" << __LINE__ << "] "
 
@@ -419,7 +426,7 @@ namespace uLog {
                 if(CheckLogLevel(level, localMinLevel)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					             << logLevelTags[level] << " [" \
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" \
 					             << (strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__) \
 					             << ":" << __func__ << ":" << __LINE__ << "] "
 
@@ -427,7 +434,7 @@ namespace uLog {
 				if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					    << logLevelTags[level] << " [" \
+                        << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" \
 					    << (strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__) \
 					    << ":" << __func__ << ":" << __LINE__ << "] "
 
@@ -450,19 +457,19 @@ namespace uLog {
 				if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					             << logLevelTags[level] << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
 
             #define uLOGL(level, localMinLevel) \
 				if(CheckLogLevel(level, localMinLevel)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					             << logLevelTags[level] << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
+                                 << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
 
 			#define uLOG_(ofs, level) \
 				if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-					    << logLevelTags[level] << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
+                        << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
 
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
@@ -485,19 +492,19 @@ namespace uLog {
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [User=" << getlogin() << "; PID=" << getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
 
                 #define uLOGL(level, localMinLevel) \
 					if(CheckLogLevel(level, localMinLevel)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [User=" << getlogin() << "; PID=" << getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
 
 				#define uLOG_(ofs, level) \
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						    << logLevelTags[level] << " [User=" << getlogin() << "; PID=" << getpid() << "] "
+                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
 
             #else // WIN32
 
@@ -506,21 +513,21 @@ namespace uLog {
                         MICRO_LOG_LOCK; \
                     	GetUserName(username, UNLEN+1); \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [User=" << username << "; PID=" << _getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
 
                 #define uLOGL(level, localMinLevel) \
 					if(CheckLogLevel(level, localMinLevel)) \
                         MICRO_LOG_LOCK; \
                     	GetUserName(username, UNLEN+1); \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [User=" << username << "; PID=" << _getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
 
                 #define uLOG_(ofs, level) \
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         GetUserName(username, UNLEN+1); \
                         ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						    << logLevelTags[level] << " [User=" << username << "; PID=" << _getpid() << "] "
+                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
 
 			#endif // WIN32
 
@@ -545,19 +552,19 @@ namespace uLog {
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [UID=" << getuid() << "; PID=" << getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
 
                 #define uLOGL(level, localMinLevel) \
 					if(CheckLogLevel(level, localMinLevel)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [UID=" << getuid() << "; PID=" << getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
 
 				#define uLOG_(ofs, level) \
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						    << logLevelTags[level] << " [UID=" << getuid() << "; PID=" << getpid() << "] "
+                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
 
 			#else // WIN32
 
@@ -565,19 +572,19 @@ namespace uLog {
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [UID=" << "?" << "; PID=" << _getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
 
                 #define uLOGL(level, localMinLevel) \
 					if(CheckLogLevel(level, localMinLevel)) \
                         MICRO_LOG_LOCK; \
                         microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						             << logLevelTags[level] << " [UID=" << "?" << "; PID=" << _getpid() << "] "
+                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
 
 				#define uLOG_(ofs, level) \
 					if(CheckLogLevel(level)) \
                         MICRO_LOG_LOCK; \
                         ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-						    << logLevelTags[level] << " [UID=" << "?" << "; PID=" << _getpid() << "] "
+                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
 
 			#endif // WIN32
 
@@ -665,6 +672,11 @@ namespace uLog {
                 << "\n\tNumber of 'null' logs:     " << nNoLogs << std::endl;
             microLog_ofs << "Highest log level: " << highestLevel << std::endl;
         }
+
+        void Statistics::SetProgName(const std::string &_progName) {
+            //+TODO
+        }
+
         #endif // MICRO_LOG_DLL
 
 

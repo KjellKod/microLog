@@ -38,6 +38,10 @@ namespace uLog {
     //#define MICRO_LOG_FILE_NAME "default.log"
 #endif
 
+#ifndef MICRO_LOG_EXECUTABLE_NAME
+    #define MICRO_LOG_EXECUTABLE_NAME ""
+#endif
+
 /// Specify one threading library to be used
 #ifndef MICRO_LOG_THREADING
 	#define MICRO_LOG_THREADING MICRO_LOG_SINGLE_THREAD
