@@ -1,6 +1,6 @@
 /**  microLog.hpp
  *
- *   Version 6.2
+ *   Version 6.2.0
  *   2014.11.09
  *
  *   It was the smallest logger in the universe ...
@@ -135,7 +135,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef MICRO_LOG_HPP
 #define MICRO_LOG_HPP
 
-#define MICRO_LOG_VERSION 6.1.1
+#define MICRO_LOG_VERSION 6.2.0
 
 // Standard threading libraries
 #define MICRO_LOG_SINGLE_THREAD  1
