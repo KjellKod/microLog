@@ -1,11 +1,17 @@
 # microLog
 
 #### - Single header logger.
-#### - Two log level thresholds, to tune verbosity on a global and local level.
+#### - Three log level thresholds, to tune verbosity on a global and local level.
 
 Distinctive features:
 
-- ...
+- Three log level thresholds:
+   - A global one, defined at build time.
+   - A global one, defined at run time.
+   - A local one, defined at run time. This allows to set different log level thresholds for different parts of the code.
+
+Why a local log level threshold?  
+Because it can be useful to focus on specific parts of a project, setting different thresholds for different files/code blocks/functionalities. 
 
 Other features:
 
@@ -19,6 +25,6 @@ Other features:
 - uLOG(level) only logs if level >= MICRO_LOG_MIN_LEVEL and level >= ULog::minLogLevel.
 - uLOG(level, localLevel) logs if level >= MICRO_LOG_MIN_LEVEL and (level >= ULog::minLogLevel or level >= localLevel).
 
-For better performance, consider logging to a ramdisk (TODO: utility that periodically copies the log file from ramdisk to hard disk).
+For better performance, consider logging to a ramdisk (TODO: external utility that periodically copies the log file from ramdisk to hard disk).
 
 Usage: See microLog_test.cpp as an example.
