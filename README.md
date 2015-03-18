@@ -19,6 +19,6 @@ Other features:
 - uLOG(level) only logs if level >= MICRO_LOG_MIN_LEVEL and level >= ULog::minLogLevel.
 - uLOG(level, localLevel) logs if level >= MICRO_LOG_MIN_LEVEL and (level >= ULog::minLogLevel or level >= localLevel).
 
-For better performance, consider logging to a ramdisk.
+For better performance, consider logging to a ramdisk (TODO: utility that periodically copies the log file from ramdisk to hard disk).
 
 Usage: See microLog_test.cpp as an example.
