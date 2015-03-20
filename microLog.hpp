@@ -346,7 +346,7 @@ namespace uLog {
         }
 
 		#if MICRO_LOG_DETAIL == 0
-			// level log
+			// level Executable log
 
 			#define uLOG(level) \
                 if(CheckLogLevel(level)) \
@@ -376,7 +376,7 @@ namespace uLog {
                 	MICRO_LOG_UNLOCK
 
         #elif MICRO_LOG_DETAIL == 1
-			// time level log
+			// time level Executable log
 
 			#define uLOG(level) \
                 if(CheckLogLevel(level)) \
@@ -409,7 +409,7 @@ namespace uLog {
                 	MICRO_LOG_UNLOCK
 
 		#elif MICRO_LOG_DETAIL == 2
-			// time level file_name func_name line log
+			// time level Executable file_name func_name line log
 
 			#define uLOG(level) \
                 if(CheckLogLevel(level)) \
@@ -438,17 +438,17 @@ namespace uLog {
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << bar << "\n" << "Time  Level  File  Function  Line  Log \n" << bar << endm; \
+					microLog_ofs << bar << "\n" << "Time  Level  Executable  File  Function  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
             #define uLOG_TITLES_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    ofs << bar << "\n" << "Time  Level  File  Function  Line  Log \n" << bar << endm; \
+					ofs << bar << "\n" << "Time  Level  Executable  File  Function  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
         #elif MICRO_LOG_DETAIL == 3
-			// time level file_path func_sig line log
+			// time level Executable file_path func_sig line log
 
 			#define uLOG(level) \
 				if(CheckLogLevel(level)) \
@@ -471,17 +471,17 @@ namespace uLog {
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << bar << "\n" << "Time  Level  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
+					microLog_ofs << bar << "\n" << "Time  Level  Executable  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
             #define uLOG_TITLES_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    ofs << bar << "\n" << "Time  Level  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
+					ofs << bar << "\n" << "Time  Level  Executable  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
         #elif MICRO_LOG_DETAIL == 4
-			// time level uname PID log
+			// time level Executable uname PID log
 
 			#if !defined(WIN32)
 
@@ -531,17 +531,17 @@ namespace uLog {
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << bar << "\n" << "Time  Level  User  PID  Log \n" << bar << endm; \
+					microLog_ofs << bar << "\n" << "Time  Level  Executable  User  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
             #define uLOG_TITLES_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    ofs << bar << "\n" << "Time  Level  User  PID  Log \n" << bar << endm; \
+					ofs << bar << "\n" << "Time  Level  Executable  User  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
         #elif MICRO_LOG_DETAIL >= 5
-			// time level UID PID log
+			// time level Executable UID PID log
 
 			#if !defined(WIN32)
 
@@ -588,13 +588,13 @@ namespace uLog {
             #define uLOG_TITLES(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    microLog_ofs << bar << "\n" << "Time  Level  UID  PID  Log \n" << bar << endm; \
+					microLog_ofs << bar << "\n" << "Time  Level  Executable  UID  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
             #define uLOG_TITLES_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
-                    ofs << bar << "\n" << "Time  Level  UID  PID  Log \n" << bar << endm; \
+					ofs << bar << "\n" << "Time  Level  Executable  UID  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
         #endif
