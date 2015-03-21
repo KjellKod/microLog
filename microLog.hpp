@@ -350,7 +350,6 @@ namespace uLog {
             return true;
         }
 
-        //+TODO
         // Run time fields selection
 
         struct LogFields
@@ -460,6 +459,7 @@ namespace uLog {
                     << (LogFields::line?"  ":"")                                \
                     << ": "
 
+        #define uLOGR2(level)  uLOGR(level, nolog)
 
 
         #if MICRO_LOG_DETAIL == 0
