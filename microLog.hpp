@@ -156,6 +156,7 @@ namespace uLog {
 #ifdef MICRO_LOG_ACTIVE
 
     #include <bitset>
+    #include <cstdio>
     #include <cstring>
     #include <ctime>
     #include <fstream>
@@ -352,9 +353,6 @@ namespace uLog {
         //+TODO
         // Run time fields selection
 
-        //+TEMPLATE
-        //+ cout << (show1?"show1 on":"show1 off") << "   " << (show2?"show2 on":"show2 off") << endl;
-
         struct LogFields
             /// Flags to enable/disable log message fields
         {
@@ -420,9 +418,11 @@ namespace uLog {
         };
 
         inline std::string LogTime() {
-            //+TODO << std::fixed << std::setprecision(3)
             float t = float(std::clock())/CLOCKS_PER_SEC;
-            return std::to_string(t) + std::string("  ");
+            const size_t sz = 16;
+            char ct[sz];
+            std::snprintf(ct, sz, "% 7.3f  ", t);
+            return std::string(ct);
         }
 
         inline std::string LogDate() {
