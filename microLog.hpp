@@ -238,7 +238,11 @@ namespace uLog {
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 std::ofstream uLog::microLog_ofs;              \
                 int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
-                int Statistics::highestLevel = 0
+                int Statistics::highestLevel = 0;              \
+                bool LogFields::time = false, LogFields::date = true, LogFields::llevel = true, LogFields::exec = false, \
+                     LogFields::uid = false, LogFields::uname = false, LogFields::pid = false, \
+                     LogFields::fileName = false, LogFields::filePath = false, LogFields::funcName = false, LogFields::funcSig = false, \
+                     LogFields::line = false, LogFields::log = true
         #else
             #define uLOG_INIT_0                                \
                 using namespace uLog;                          \
@@ -345,7 +349,87 @@ namespace uLog {
             return true;
         }
 
-		#if MICRO_LOG_DETAIL == 0
+        //+TODO
+        // Run time fields selection
+
+        //+TEMPLATE
+        //+ cout << (show1?"show1 on":"show1 off") << "   " << (show2?"show2 on":"show2 off") << endl;
+
+        struct LogFields
+            /// Flags to enable/disable log message fields
+        {
+            static bool time, date, llevel, exec,
+                        uid, uname, pid,
+                        fileName, filePath, funcName, funcSig,
+                        line, log;
+
+            LogFields() {
+                SetDefault();
+            }
+
+            static void SetDefault() {
+                time = false; date = true;
+                llevel = true;
+                exec = false;
+                uid = false; uname = false; pid = false;
+                fileName = false; filePath = false;
+                funcName = false; funcSig = false; line = false;
+                log = true;
+            }
+
+            static void SetDetailed() {
+                time = true; date = true;
+                llevel = true;
+                exec = true;
+                uid = false; uname = false; pid = false;
+                fileName = false; filePath = false;
+                funcName = false; funcSig = false; line = false;
+                log = true;
+            }
+
+            static void SetSystem() {
+                time = false; date = true;
+                llevel = true;
+                exec = true;
+                uid = true; uname = true; pid = true;
+                fileName = true; filePath = true;
+                funcName = false; funcSig = false; line = false;
+                log = true;
+            }
+
+            static void SetDebug() {
+                time = false; date = false;
+                llevel = true;
+                exec = true;
+                uid = false; uname = false; pid = false;
+                fileName = true; filePath = false;
+                funcName = true; funcSig = false; line = true;
+                log = true;
+            }
+
+            static void SetVerbose() {
+                time = true; date = true;
+                llevel = true;
+                exec = true;
+                uid = false; uname = false; pid = true;
+                fileName = false; filePath = true;
+                funcName = false; funcSig = true; line = true;
+                log = true;
+            }
+        };
+
+        #define uLOGR(level, localMinLevel)                             \
+            if(CheckLogLevel(level, localMinLevel))                     \
+                MICRO_LOG_LOCK;                                         \
+                microLog_ofs                                            \
+                    << (LogFields::llevel?logLevelTags[level]:"")       \
+                    << (LogFields::llevel?"  ":"")                      \
+                    << ": "
+
+        //+                   << (LogFields::time?(std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC):"")
+
+
+        #if MICRO_LOG_DETAIL == 0
 			// level Executable log
 
 			#define uLOG(level) \

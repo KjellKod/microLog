@@ -62,6 +62,8 @@ int main()
 		uLOG(i) << "Test log message number " << i << " with value " << 1.23*i << uLOGE;
 	}
 
+    uLOGR(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
+
     uLog::Statistics::Log();
 }
 
