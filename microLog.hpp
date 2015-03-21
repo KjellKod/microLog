@@ -419,32 +419,45 @@ namespace uLog {
             }
         };
 
+        inline std::string LogTime() {
+            //+TODO << std::fixed << std::setprecision(3)
+            float t = float(std::clock())/CLOCKS_PER_SEC;
+            return std::to_string(t) + std::string("  ");
+        }
+
+        inline std::string LogDate() {
+            std::time_t t = std::time(nullptr);
+            char mbstr[32];
+            std::strftime(mbstr, sizeof(mbstr), "%F %T  ", std::localtime(&t));
+            return std::string(mbstr);
+        }
+
         #define uLOGR(level, localMinLevel)                                     \
             if(CheckLogLevel(level, localMinLevel))                             \
                 MICRO_LOG_LOCK;                                                 \
                 microLog_ofs                                                    \
-                    << std::fixed << std::setprecision(3) << (LogFields::time?std::to_string(float(std::clock())/CLOCKS_PER_SEC):"")  \
-                    << (LogFields::date?"TODO":"")   \
+                    << (LogFields::time?LogTime():"")                           \
+                    << (LogFields::date?LogDate():"")                           \
                     << (LogFields::llevel?logLevelTags[level]:"")               \
                     << (LogFields::llevel?"  ":"")                              \
                     << (LogFields::exec?MICRO_LOG_EXECUTABLE_NAME:"")           \
-                    << (LogFields::exec?"  ":"")                              \
+                    << (LogFields::exec?"  ":"")                                \
                     << (LogFields::pid?std::to_string(getpid()):"")             \
-                    << (LogFields::pid?"  ":"")                              \
+                    << (LogFields::pid?"  ":"")                                 \
                     << (LogFields::uid?std::to_string(getuid()):"")             \
-                    << (LogFields::uid?"  ":"")                              \
+                    << (LogFields::uid?"  ":"")                                 \
                     << (LogFields::uname?getlogin():"")                         \
-                    << (LogFields::uname?"  ":"")                              \
+                    << (LogFields::uname?"  ":"")                               \
                     << (LogFields::fileName?(strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__):"")  \
-                    << (LogFields::fileName?"  ":"")                              \
+                    << (LogFields::fileName?"  ":"")                            \
                     << (LogFields::filePath?__FILE__:"")                        \
-                    << (LogFields::filePath?"  ":"")                              \
+                    << (LogFields::filePath?"  ":"")                            \
                     << (LogFields::funcName?__func__:"")                        \
-                    << (LogFields::funcName?"  ":"")                              \
+                    << (LogFields::funcName?"  ":"")                            \
                     << (LogFields::funcSig?__PRETTY_FUNCTION__:"")              \
-                    << (LogFields::funcSig?"  ":"")                              \
+                    << (LogFields::funcSig?"  ":"")                             \
                     << (LogFields::line?std::to_string(__LINE__):"")            \
-                    << (LogFields::line?"  ":"")                              \
+                    << (LogFields::line?"  ":"")                                \
                     << ": "
 
 
