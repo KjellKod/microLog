@@ -65,6 +65,7 @@ int main()
 	}
 
     uLog::LogFields::SetVerbose();
+    uLOG_TITLES(warning);		// columns' titles
     uLOGR2(error) << "Test unified logging " << 0.123 << uLOGE;
     uLOGR(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
 

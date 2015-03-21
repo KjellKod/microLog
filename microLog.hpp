@@ -461,6 +461,28 @@ namespace uLog {
 
         #define uLOGR2(level)  uLOGR(level, nolog)
 
+        #define uLOG_TITLES(level)                                              \
+            if(CheckLogLevel(level))                                            \
+                MICRO_LOG_LOCK;                                                 \
+                microLog_ofs                                                    \
+                    << bar << "\n"                                              \
+                    << (LogFields::time?"Time  ":"")                            \
+                    << (LogFields::date?"Date  ":"")                            \
+                    << (LogFields::llevel?"Level  ":"")                         \
+                    << (LogFields::exec?"Executable  ":"")                      \
+                    << (LogFields::pid?"PID  ":"")                              \
+                    << (LogFields::uid?"UID  ":"")                              \
+                    << (LogFields::uname?"User  ":"")                           \
+                    << (LogFields::fileName?"Filename  ":"")                    \
+                    << (LogFields::filePath?"Filepath  ":"")                    \
+                    << (LogFields::funcName?"Function  ":"")                    \
+                    << (LogFields::funcSig?"Function_signature  ":"")           \
+                    << (LogFields::line?"Line  ":"")                            \
+                    << "\n" << bar << endm;                                     \
+                MICRO_LOG_UNLOCK
+
+
+
 
         #if MICRO_LOG_DETAIL == 0
 			// level Executable log
@@ -480,13 +502,13 @@ namespace uLog {
                     MICRO_LOG_LOCK; \
                     ofs << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << bar << "\n" << "Level  Log \n" << bar << endm; \
                 	MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     ofs << bar << "\n" << "Level  Log \n" << bar << endm; \
@@ -513,13 +535,13 @@ namespace uLog {
                     ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
                         << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << ": "
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     microLog_ofs << bar << "\n" << "Time  Level  Log \n" << bar << endm; \
                 	MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
                     ofs << bar << "\n" << "Time  Level  Log \n" << bar << endm; \
@@ -552,13 +574,13 @@ namespace uLog {
 					    << (strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__) \
 					    << ":" << __func__ << ":" << __LINE__ << "] "
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					microLog_ofs << bar << "\n" << "Time  Level  Executable  File  Function  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					ofs << bar << "\n" << "Time  Level  Executable  File  Function  Line  Log \n" << bar << endm; \
@@ -585,13 +607,13 @@ namespace uLog {
                     ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
                         << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [" << __FILE__ << ":" << __PRETTY_FUNCTION__ << ":" << __LINE__ << "] "
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					microLog_ofs << bar << "\n" << "Time  Level  Executable  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					ofs << bar << "\n" << "Time  Level  Executable  FilePath  FunctionSig  Line  Log \n" << bar << endm; \
@@ -645,13 +667,13 @@ namespace uLog {
 
 			#endif // WIN32
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					microLog_ofs << bar << "\n" << "Time  Level  Executable  User  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					ofs << bar << "\n" << "Time  Level  Executable  User  PID  Log \n" << bar << endm; \
@@ -702,13 +724,13 @@ namespace uLog {
 
 			#endif // WIN32
 
-            #define uLOG_TITLES(level) \
+            #define uLOG_TITLES_DEPRECATED(level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					microLog_ofs << bar << "\n" << "Time  Level  Executable  UID  PID  Log \n" << bar << endm; \
                     MICRO_LOG_UNLOCK
 
-            #define uLOG_TITLES_(ofs, level) \
+            #define uLOG_TITLES_DEPRECATED_(ofs, level) \
                 if(CheckLogLevel(level)) \
                     MICRO_LOG_LOCK; \
 					ofs << bar << "\n" << "Time  Level  Executable  UID  PID  Log \n" << bar << endm; \
