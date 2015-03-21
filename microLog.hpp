@@ -358,8 +358,9 @@ namespace uLog {
         struct LogFields
             /// Flags to enable/disable log message fields
         {
-            static bool time, date, llevel, exec,
-                        uid, uname, pid,
+            static bool time, date, llevel,
+                        exec, pid,
+                        uid, uname,
                         fileName, filePath, funcName, funcSig,
                         line, log;
 
@@ -370,8 +371,8 @@ namespace uLog {
             static void SetDefault() {
                 time = false; date = true;
                 llevel = true;
-                exec = false;
-                uid = false; uname = false; pid = false;
+                exec = false; pid = false;
+                uid = false; uname = false;
                 fileName = false; filePath = false;
                 funcName = false; funcSig = false; line = false;
                 log = true;
@@ -380,8 +381,8 @@ namespace uLog {
             static void SetDetailed() {
                 time = true; date = true;
                 llevel = true;
-                exec = true;
-                uid = false; uname = false; pid = false;
+                exec = true; pid = false;
+                uid = false; uname = false;
                 fileName = false; filePath = false;
                 funcName = false; funcSig = false; line = false;
                 log = true;
@@ -390,8 +391,8 @@ namespace uLog {
             static void SetSystem() {
                 time = false; date = true;
                 llevel = true;
-                exec = true;
-                uid = true; uname = true; pid = true;
+                exec = true; pid = true;
+                uid = true; uname = true;
                 fileName = true; filePath = true;
                 funcName = false; funcSig = false; line = false;
                 log = true;
@@ -400,8 +401,8 @@ namespace uLog {
             static void SetDebug() {
                 time = false; date = false;
                 llevel = true;
-                exec = true;
-                uid = false; uname = false; pid = false;
+                exec = true; pid = false;
+                uid = false; uname = false;
                 fileName = true; filePath = false;
                 funcName = true; funcSig = false; line = true;
                 log = true;
@@ -410,20 +411,29 @@ namespace uLog {
             static void SetVerbose() {
                 time = true; date = true;
                 llevel = true;
-                exec = true;
-                uid = false; uname = false; pid = true;
-                fileName = false; filePath = true;
-                funcName = false; funcSig = true; line = true;
+                exec = true; pid = true;
+                uid = true; uname = true;
+                fileName = true; filePath = true;
+                funcName = true; funcSig = true; line = true;
                 log = true;
             }
         };
 
-        #define uLOGR(level, localMinLevel)                             \
-            if(CheckLogLevel(level, localMinLevel))                     \
-                MICRO_LOG_LOCK;                                         \
-                microLog_ofs                                            \
-                    << (LogFields::llevel?logLevelTags[level]:"")       \
-                    << (LogFields::llevel?"  ":"")                      \
+        #define uLOGR(level, localMinLevel)                                     \
+            if(CheckLogLevel(level, localMinLevel))                             \
+                MICRO_LOG_LOCK;                                                 \
+                microLog_ofs                                                    \
+                    << (LogFields::llevel?logLevelTags[level]:"")               \
+                    << (LogFields::llevel?"  ":"")                              \
+                    << (LogFields::exec?MICRO_LOG_EXECUTABLE_NAME:"")           \
+                    << (LogFields::pid?std::to_string(getpid()):"")             \
+                    << (LogFields::uid?std::to_string(getuid()):"")             \
+                    << (LogFields::uname?getlogin():"")                         \
+                    << (LogFields::fileName?(strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__):"")  \
+                    << (LogFields::filePath?__FILE__:"")                        \
+                    << (LogFields::funcName?__func__:"")                        \
+                    << (LogFields::funcSig?__PRETTY_FUNCTION__:"")              \
+                    << (LogFields::line?std::to_string(__LINE__):"")            \
                     << ": "
 
         //+                   << (LogFields::time?(std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC):"")
