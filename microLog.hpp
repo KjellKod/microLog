@@ -455,6 +455,7 @@ namespace uLog {
             #ifdef _POSIX_VERSION
                 return getlogin();
             #elif defined WIN32
+                GetUserName(username, UNLEN+1);
                 return username;
             #else
                 return "?";
@@ -512,118 +513,12 @@ namespace uLog {
                     << "\n" << bar << endm;                                     \
                 MICRO_LOG_UNLOCK
 
-
-
-
-        #if MICRO_LOG_DETAIL == 0
-        #elif MICRO_LOG_DETAIL == 1
-		#elif MICRO_LOG_DETAIL == 2
-        #elif MICRO_LOG_DETAIL == 3
-        #elif MICRO_LOG_DETAIL == 4
-			// time level Executable uname PID log
-
-			#if !defined(WIN32)
-
-				#define uLOG(level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
-
-                #define uLOGL(level, localMinLevel) \
-					if(CheckLogLevel(level, localMinLevel)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
-
-				#define uLOG_(ofs, level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << getlogin() << "; PID=" << getpid() << "] "
-
-            #else // WIN32
-
-				#define uLOG(level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                    	GetUserName(username, UNLEN+1); \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
-
-                #define uLOGL(level, localMinLevel) \
-					if(CheckLogLevel(level, localMinLevel)) \
-                        MICRO_LOG_LOCK; \
-                    	GetUserName(username, UNLEN+1); \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
-
-                #define uLOG_(ofs, level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        GetUserName(username, UNLEN+1); \
-                        ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [User=" << username << "; PID=" << _getpid() << "] "
-
-			#endif // WIN32
-
-        #elif MICRO_LOG_DETAIL >= 5
-			// time level Executable UID PID log
-
-			#if !defined(WIN32)
-
-				#define uLOG(level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
-
-                #define uLOGL(level, localMinLevel) \
-					if(CheckLogLevel(level, localMinLevel)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
-
-				#define uLOG_(ofs, level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << getuid() << "; PID=" << getpid() << "] "
-
-			#else // WIN32
-
-				#define uLOG(level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
-
-                #define uLOGL(level, localMinLevel) \
-					if(CheckLogLevel(level, localMinLevel)) \
-                        MICRO_LOG_LOCK; \
-                        microLog_ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                                     << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
-
-				#define uLOG_(ofs, level) \
-					if(CheckLogLevel(level)) \
-                        MICRO_LOG_LOCK; \
-                        ofs << std::fixed << std::setprecision(3) << float(std::clock())/CLOCKS_PER_SEC << " " \
-                            << logLevelTags[level] << " - " << MICRO_LOG_EXECUTABLE_NAME << " [UID=" << "?" << "; PID=" << _getpid() << "] "
-
-			#endif // WIN32
-
-        #endif
-
         // uLOG log terminator
         #define uLOGE endm; MICRO_LOG_UNLOCK
 
 		#define uLOGT(level) \
 			if(CheckLogLevel(level)) \
 				microLog_ofs
-
-		#define uLOGT_(ofs, level) \
-			if(CheckLogLevel(level)) \
-				ofs
 
         #define uLOG_DATE \
 			if(std::time(&microLog_time)) \
@@ -633,17 +528,9 @@ namespace uLog {
 			if(std::time(&microLog_time), CheckLogLevel(level)) \
                 microLog_ofs << "\nDate: " << std::ctime(&microLog_time)
 
-		#define uLOGD_(ofs, level) \
-			if(std::time(&microLog_time), CheckLogLevel(level)) \
-                ofs << "\nDate: " << std::ctime(&microLog_time)
-
 		#define uLOGB(level) \
 			if(CheckLogLevel(level)) \
                 microLog_ofs << bar << endm
-
-		#define uLOGB_(ofs, level) \
-			if(CheckLogLevel(level)) \
-                ofs << bar << endm
 
         #ifndef MICRO_LOG_DLL
         void LogLevels() {
