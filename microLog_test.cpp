@@ -68,6 +68,14 @@ int main()
     uLOG(error) << "Test unified logging " << 0.123 << uLOGE;
     uLOG_(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
 
+    logLevelVar = detail;
+    uLOG_(error, logLevelVar) << "Test variable log threshold " << 1 << uLOGE;
+
+    logLevelVar = error;
+    uLOG_(error, logLevelVar) << "Test variable log threshold " << 2 << uLOGE;
+
+
+
     uLog::Statistics::Log();
 }
 

@@ -54,7 +54,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	- When not activated, or when a log message level is below the threshold, there is no generated binary code.
     - uLOG(level) only logs if level >= MICRO_LOG_MIN_LEVEL and level >= ULog::minLogLevel.
     - uLOG_(level, localLevel) logs if level >= MICRO_LOG_MIN_LEVEL and (level >= ULog::minLogLevel or level >= localLevel).
-          This allows to specify different minimum log levels for different kinds of log messages.
+          This allows to specify different minimum log levels for different kinds of log messages;
+          localLevel can be a const or a variable.
     - To flush the message use the uLOGE manipulator (stands for log-end) instead of std::endl!
 	- The output log file can be:
 		- Unique for this executable, with a global static variable file stream (microLog_ofs).
@@ -191,10 +192,6 @@ namespace uLog {
 
 		#ifndef MICRO_LOG_MIN_LEVEL
 			#define MICRO_LOG_MIN_LEVEL 2
-		#endif
-
-		#ifndef MICRO_LOG_DETAIL
-			#define MICRO_LOG_DETAIL 2
 		#endif
 
         // microLog initialization:

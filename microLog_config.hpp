@@ -28,11 +28,9 @@ namespace uLog {
         logQSSolverForCompleteCarModel = detail,
         logRootNewton = info,
         logInfo = nolog;
+    static int
+        logLevelVar = info;
 }
-
-#ifndef MICRO_LOG_DETAIL
-    #define MICRO_LOG_DETAIL 2
-#endif
 
 #ifndef MICRO_LOG_EXECUTABLE_NAME
     #define MICRO_LOG_EXECUTABLE_NAME ""
