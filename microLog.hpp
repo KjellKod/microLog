@@ -463,7 +463,7 @@ namespace uLog {
         }
 
 
-        #define uLOGR(level, localMinLevel)                                     \
+        #define uLOG_(level, localMinLevel)                                     \
             if(CheckLogLevel(level, localMinLevel))                             \
                 MICRO_LOG_LOCK;                                                 \
                 microLog_ofs                                                    \
@@ -491,7 +491,7 @@ namespace uLog {
                     << (LogFields::line?"  ":"")                                \
                     << ": "
 
-        #define uLOGR2(level)  uLOGR(level, nolog)
+        #define uLOG(level)  uLOG_(level, nolog)
 
         #define uLOG_TITLES(level)                                              \
             if(CheckLogLevel(level))                                            \

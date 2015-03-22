@@ -41,8 +41,8 @@ int main()
     uLog::minLogLevel = info;
     uLog::MinLogLevel();
 
-    uLOGR2(info) << "Test log message number " << 2 << " with value " << 3.141 << uLOGE;
-    uLOGR2(detail) << "Log not generated." << uLOGE;
+    uLOG(info) << "Test log message number " << 2 << " with value " << 3.141 << uLOGE;
+    uLOG(detail) << "Log not generated." << uLOGE;
 
     uLog::minLogLevel = warning;
     uLog::MinLogLevel();
@@ -53,21 +53,21 @@ int main()
     uLOGT(warning) << "first token, ";
     uLOGT(warning) << "last token" << uLOGE;
 */
-    uLOGR2(info) << "Log not generated." << uLOGE;
-    uLOGR2(error) << "Test Log." << uLOGE;
-    uLOGR(detail, logQSExperiment) << "Test minimum log levels for specific code areas: not generated." << uLOGE;
-    uLOGR(error, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
-    uLOGR(info, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
-    uLOGR(detail, logGPSolver) << "Test minimum log levels for specific code areas." << uLOGE;
+    uLOG(info) << "Log not generated." << uLOGE;
+    uLOG(error) << "Test Log." << uLOGE;
+    uLOG_(detail, logQSExperiment) << "Test minimum log levels for specific code areas: not generated." << uLOGE;
+    uLOG_(error, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
+    uLOG_(info, logInfo) << "Test minimum log levels for specific code areas." << uLOGE;
+    uLOG_(detail, logGPSolver) << "Test minimum log levels for specific code areas." << uLOGE;
 
 	for(int i = 1; i < 10; ++i) {
-        uLOGR2(i) << "Test log message number " << i << " with value " << 1.23*i << uLOGE;
+        uLOG(i) << "Test log message number " << i << " with value " << 1.23*i << uLOGE;
 	}
 
     uLog::LogFields::SetVerbose();
     uLOG_TITLES(warning);		// columns' titles
-    uLOGR2(error) << "Test unified logging " << 0.123 << uLOGE;
-    uLOGR(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
+    uLOG(error) << "Test unified logging " << 0.123 << uLOGE;
+    uLOG_(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
 
     uLog::Statistics::Log();
 }
