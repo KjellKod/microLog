@@ -43,9 +43,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-/** A minimalistic logging utility.
+/** A compact logging utility.
 
-    - A single file project (this one).
+    - A single header file (this one).
 	- There are no implementation files, so makefiles do not have to be touched.
     - Thread safe (C++11 threads, Boost threads or pthread).
 	- It can be used when no debugger nor other logging system is available.
@@ -53,16 +53,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	- To activate it, #define MICRO_LOG_ACTIVE.
 	- When not activated, or when a log message level is below the threshold, there is no generated binary code.
     - uLOG(level) only logs if level >= MICRO_LOG_MIN_LEVEL and level >= ULog::minLogLevel.
-    - uLOG(level, localLevel) logs if level >= MICRO_LOG_MIN_LEVEL and (level >= ULog::minLogLevel or level >= localLevel).
+    - uLOG_(level, localLevel) logs if level >= MICRO_LOG_MIN_LEVEL and (level >= ULog::minLogLevel or level >= localLevel).
+          This allows to specify different minimum log levels for different kinds of log messages.
     - To flush the message use the uLOGE manipulator (stands for log-end) instead of std::endl!
 	- The output log file can be:
-		- Unique for this executable, with a fixed preprocessor defined file name (MICRO_LOG_FILE_NAME).
 		- Unique for this executable, with a global static variable file stream (microLog_ofs).
-		- Custom, with a stream passed as a parameter to every log message.
+        - Custom, with a stream passed as a parameter to every log message (TODO).
 	- Multithreading: the MICRO_LOG_LOCK/MICRO_LOG_UNLOCK macros delimit a critical section.
 		- Their values depend on the adopted threading library, and can be defined in microLog_config.hpp.
 		- Predefined values available for: C++11 threads, Boost threads, pthread.
-	- For better performance, consider logging to a ramdisk.
+    - For better performance, log to a ramdisk and use an external utility to periodically move the logs to
+          a permanent data storage.
 
 	Usage: See microLog_test.cpp as an example.
 
@@ -71,41 +72,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 		Define these macros in the makefile or as arguments to the compiler:
 
 		MICRO_LOG_ACTIVE      to add the logger calls to the executable (if set to 1).
-		MICRO_LOG_FILE_NAME   to set a log file name different from the default.
-		MICRO_LOG_MIN_LEVEL   to set a minimum log level below which the logger call will not be added.
-		MICRO_LOG_DETAIL      to set the amount of details to be generated (0-5).
-
-	Log message structures:
-
-        MICRO_LOG_DETAIL = 0
-		[loglevel] [Log message]
-
-        MICRO_LOG_DETAIL = 1
-		[Time since program launch in seconds] [loglevel] [Log message]
-
-        MICRO_LOG_DETAIL = 2
-		[Time since program launch in seconds] [loglevel] [file name:function_name:line] [Log message]
-
-        MICRO_LOG_DETAIL = 3
-		[Time since program launch in seconds] [loglevel] [file path:function_signature:line] [Log message]
-
-        MICRO_LOG_DETAIL = 4
-		[Time since program launch in seconds] [loglevel] [uname; PID] [Log message]
-
-        MICRO_LOG_DETAIL = 5
-		[Time since program launch in seconds] [loglevel] [UID; PID] [Log message]
-
-	Output log examples with different values for MICRO_LOG_DETAIL:
-
-		----------------------------------------
-		Date: Fri Dec 09 11:44:42 2012
-		4 Test log message number 2 with value 3.141
-        0.025 4 Test log message number 2 with value 3.141
-        0.025 4 [microLog_test.cpp:TestFunc:16] Test log message number 2 with value 3.141
-        0.025 4 [path/to/microLog_test.cpp:void TestFunc():16] Test log message number 2 with value 3.141
-        0.025 4 [User=mele; PID=123] Test log message number 2 with value 3.141
-        0.025 4 [UID=456; PID=123] Test log message number 2 with value 3.141
-
+        MICRO_LOG_MIN_LEVEL   to set a minimum log level below which the logger call will not be added.
 */
 
 

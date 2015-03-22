@@ -6,7 +6,6 @@
 // These macros can also be defined in the makefile, or in microLog_config.hpp:
 /*
 #define MICRO_LOG_ACTIVE 1
-#define MICRO_LOG_FILE_NAME "test.log"
 #define MICRO_LOG_MIN_LEVEL 4
 */
 
