@@ -69,10 +69,10 @@ int main()
     uLOG_(error, logInfo) << "Test unified logging " << 1.23 << uLOGE;
 
     logLevelVar = detail;
-    uLOG_(error, logLevelVar) << "Test variable log threshold " << 1 << uLOGE;
+    uLOG_(info, logLevelVar) << "Test variable log threshold " << 1 << uLOGE;
 
     logLevelVar = error;
-    uLOG_(error, logLevelVar) << "Test variable log threshold " << 2 << uLOGE;
+    uLOG_(info, logLevelVar) << "Test variable log threshold " << 2 << uLOGE;
 
 
 
