@@ -79,13 +79,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /*
 //+TODO
+
+    - Test:
+        - Multithreading/C++11.
+        - Multithreading/Boost.
+        . On Windows.
+
+    - Rolling logs.
+
+    - Ram-disk: utility that moves the logs from the ram-disk based log file
+        to a hard disk, either at fixed time intervals or when space on the
+        ram-disk falls below a certain threshold.
+
+    Low priority:
     - Add log levels based on function names.
     - Make microLog as compatible as possible (regarding logging syntax) with g3log.
     - Store all the required details in a bit mask parameter.
-	- Test:
-		- Multithreading/C++11.
-        - Multithreading/Boost.
-        . On Windows.
     - In Windows, DLLs have troubles with static variables. Now static variables are removed when dealing with DLLs. Use dllexport/dllimport to fix this issue.
     - Log to multiple different log files simultaneously, with different log levels, details, ...
         - Tipically one of these files will be on ram-disk.
@@ -94,10 +103,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           Pros: this makes the logger independent from the log files structure, and 
                 allows to have the performance heavy task of dealing with the file
                 system to another executable.
-    - Utility that periodically checks the size of the log file, and when it 
-      reaches a certain value, it copies it somewhere else (e.g. on a different
-      file, appendig it to an existing log, ...). This is useful, e.g., in case 
-      a small partition is available on a ram-disk. (part of the log server)
 */
 
 #ifndef MICRO_LOG_HPP
