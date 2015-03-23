@@ -83,7 +83,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     - Test:
         - Multithreading/C++11.
         - Multithreading/Boost.
-        . On Windows.
+        - On Linux/Windows.
 
     - Rolling logs.
 

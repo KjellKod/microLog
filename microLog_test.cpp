@@ -22,8 +22,26 @@ uLOG_INIT;     // microLog initialization
 
 int main()
 {
+    std::cout << "\n--- microLog test ---\n" << std::endl;
+
     std::string logPath;
-    logPath.append("/Volumes/ramdisk/");
+    std::string ramDiskPath = "/Volumes/ramdisk/";
+
+    char pathOpt = '2';
+
+    if(pathOpt == '0')
+    {
+        std::cout << "Select log file path:\n"
+                  << "1. Local directory.\n"
+                  << "2. Ram disk (" << ramDiskPath << ").\n"
+                  << "   Note: check you have a ram disk on your system, a set its path in the source code (microLog_test.cpp).\n" << std::endl;
+
+        std::cin >> pathOpt;
+    }
+
+    if(pathOpt == '2')
+        logPath.append("/Volumes/ramdisk/");
+
     logPath.append("myProg.log");
 
     std::cout << "Test version:  " << VERSION << std::endl;
@@ -77,6 +95,8 @@ int main()
 
 
     uLog::Statistics::Log();
+
+    std::cout << "\nTest completed." << std::endl;
 }
 
 #endif // MICRO_LOG_TEST
