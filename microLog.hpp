@@ -86,8 +86,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         - On Linux/Windows.
 
     - Rolling logs.
+        - Let an external utility deal with it.
+        - Just check there is space on the disk partition.
 
-    - Ram-disk: utility that moves the logs from the ram-disk based log file
+    - Ram-disk: add utility that moves the logs from the ram-disk based log file
         to a hard disk, either at fixed time intervals or when space on the
         ram-disk falls below a certain threshold.
 
@@ -134,6 +136,7 @@ namespace uLog {
     #include <ctime>
     #include <fstream>
     #include <iomanip>
+    #include <iostream>
     #include <string>
     #include <vector>
     
@@ -176,6 +179,8 @@ namespace uLog {
     
     extern int minLogLevel;         // minimum level a message must have to be logged
 
+    extern int loggerStatus;        // OK=0, error otherwise
+
 	#ifdef MICRO_LOG_ACTIVE
 
         // Begin: Platform specific
@@ -206,6 +211,7 @@ namespace uLog {
             #define uLOG_INIT_0                                \
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
+                int uLog::loggerStatus = 0;                    \
                 std::ofstream uLog::microLog_ofs;              \
                 int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
                 int Statistics::highestLevel = 0;              \
@@ -217,13 +223,27 @@ namespace uLog {
             #define uLOG_INIT_0                                \
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
+                int uLog::loggerStatus = 0;                    \
                 std::ofstream uLog::microLog_ofs
         #endif
 
         // microLog start:
-        #define uLOG_START(logFilename)     microLog_ofs.open(logFilename)
-        #define uLOG_START_APP(logFilename) microLog_ofs.open(logFilename, std::fstream::app)
 
+        #define uLOG_START(logFilename)             \
+            uLog::loggerStatus = 0;                 \
+            microLog_ofs.open(logFilename);         \
+            if(!microLog_ofs) {                     \
+                uLog::loggerStatus = -1;            \
+                std::cerr << "Error opening log file. Cannot produce logs. Check if disk space is available." << std::endl;  \
+            }
+
+        #define uLOG_START_APP(logFilename)                         \
+            uLog::loggerStatus = 0;                                 \
+            microLog_ofs.open(logFilename, std::fstream::app);      \
+            if(!microLog_ofs) {                                     \
+                uLog::loggerStatus = -1;                            \
+                std::cerr << "Error opening log file. Cannot produce logs. Check if disk space is available." << std::endl;  \
+            }
 
         // Multithreading: macros used to define a critical section
         //                 according to the adopted threading library:
