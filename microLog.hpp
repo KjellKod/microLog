@@ -84,6 +84,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         . Report an error if the log file cannot be opened.
         . If an error has been detected, disable logging.
         - Detect errors when logging, especially the disk full one.
+            http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/reference.html#space
+            http://theboostcpplibraries.com/boost.filesystem-files-and-directories
 
     - Complete the code when the logger is disabled.
 
