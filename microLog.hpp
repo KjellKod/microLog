@@ -85,7 +85,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         . If an error has been detected, disable logging.
         - Detect errors when logging, especially the disk full one.
             http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/reference.html#space
-            http://theboostcpplibraries.com/boost.filesystem-files-and-directories
+            http://theboostcpplibraries.com/boost.filesystem-files-and-directories#ex.filesystem_13
 
     - Complete the code when the logger is disabled.
 
@@ -150,6 +150,7 @@ namespace uLog {
     #include <iostream>
     #include <string>
     #include <vector>
+    #include <boost/filesystem.hpp>
     
     #ifndef MICRO_LOG_EXECUTABLE_NAME
         #define MICRO_LOG_EXECUTABLE_NAME ""
@@ -191,6 +192,8 @@ namespace uLog {
     extern int minLogLevel;         // minimum level a message must have to be logged
 
     extern int loggerStatus;        // OK=0, error otherwise
+
+    static const size_t maxLogSize = 1024;      // max length of a log message (bytes)
 
 	#ifdef MICRO_LOG_ACTIVE
 
@@ -356,6 +359,19 @@ namespace uLog {
             return true;
         }
 
+        inline bool CheckAvailableSpace()
+            // Check if the next log message can fit in the remaining available space
+        {
+            //+TODO
+            boost::system::error_code errCode;
+            boost::filesystem::space_info space = boost::filesystem::space(logFilename, errCode);
+            if(space.available < maxLogSize) {
+                std::cerr << "Logger error: not enough space available in the current partition (" << space.available << " bytes)." << std::endl;
+                return false;
+            }
+            return true;
+        }
+
         // Run time fields selection
 
         struct LogFields
@@ -470,7 +486,7 @@ namespace uLog {
 
 
         #define uLOG_(level, localMinLevel)                                     \
-            if(CheckLogLevel(level, localMinLevel))                             \
+            if(CheckLogLevel(level, localMinLevel) && CheckAvailableSpace())    \
                 MICRO_LOG_LOCK;                                                 \
                 microLog_ofs                                                    \
                     << (LogFields::time?LogTime():"")                           \
