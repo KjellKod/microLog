@@ -85,6 +85,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         . If an error has been detected, disable logging.
         - Detect errors when logging, especially the disk full one.
 
+    - Complete the code when the logger is disabled.
+
+    - Testing.
+
     - Test:
         - Multithreading/C++11.
         - Multithreading/Boost.
@@ -335,9 +339,9 @@ namespace uLog {
                 Statistics::Update(_level);
             #endif
 
-            if(!loggerStatus) {        // cannot log if status is not clean
+            if(loggerStatus != 0) {        // cannot log if status is not clean
                 if(_level > error)
-                    std::cerr << "Error: logger disabled, and a critical error has been generated!" << std::endl;
+                    std::cerr << "Error " << loggerStatus << ": logger disabled, and a critical error has been generated!" << std::endl;
                 return false;
             }
 
