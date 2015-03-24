@@ -80,6 +80,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
 //+TODO
 
+    - Error management:
+        . Report an error if the log file cannot be opened.
+        . If an error has been detected, disable logging.
+        - Detect errors when logging, especially the disk full one.
+
     - Test:
         - Multithreading/C++11.
         - Multithreading/Boost.
@@ -329,6 +334,12 @@ namespace uLog {
             #ifndef MICRO_LOG_DLL
                 Statistics::Update(_level);
             #endif
+
+            if(!loggerStatus) {        // cannot log if status is not clean
+                if(_level > error)
+                    std::cerr << "Error: logger disabled, and a critical error has been generated!" << std::endl;
+                return false;
+            }
 
             if(_level < MICRO_LOG_MIN_LEVEL || _level < _localLevel)
                 return false;
