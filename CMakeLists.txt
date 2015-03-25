@@ -61,7 +61,14 @@ set(SRC
 	microLog.hpp
 	microLog_test.cpp)
 
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+
 add_executable(${PRJ} ${SRC})
+
+target_link_libraries(${PRJ}
+	${Boost_SYSTEM_LIBRARY}
+	${Boost_FILESYSTEM_LIBRARY}
+)
 
 
 #---

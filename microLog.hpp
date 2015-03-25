@@ -87,6 +87,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/reference.html#space
             http://theboostcpplibraries.com/boost.filesystem-files-and-directories#ex.filesystem_13
 
+    - Use tabs to separate fields in the logs.
+
     - Complete the code when the logger is disabled.
 
     - Testing.
@@ -150,7 +152,6 @@ namespace uLog {
     #include <iostream>
     #include <string>
     #include <vector>
-    #include <boost/filesystem.hpp>
     
     #ifndef MICRO_LOG_EXECUTABLE_NAME
         #define MICRO_LOG_EXECUTABLE_NAME ""
@@ -162,6 +163,14 @@ namespace uLog {
         #include <boost/thread/thread.hpp>
     #elif(MICRO_LOG_THREADING == MICRO_LOG_PTHREAD)
         #include <pthread.h>
+    #endif
+
+    #ifndef MICRO_LOG_BOOST         // Boost used by default
+        #define MICRO_LOG_BOOST 1
+    #endif
+
+    #if(MICRO_LOG_BOOST == 1)
+        #include <boost/filesystem.hpp>
     #endif
 
     #ifndef WIN32
@@ -189,9 +198,9 @@ namespace uLog {
         static void Log();
     };
     
-    extern int minLogLevel;         // minimum level a message must have to be logged
-
-    extern int loggerStatus;        // OK=0, error otherwise
+    extern int minLogLevel;                  // minimum level a message must have to be logged
+    extern int loggerStatus;                 // OK=0, error otherwise
+    extern std::string logFilename;
 
     static const size_t maxLogSize = 1024;      // max length of a log message (bytes)
 
@@ -226,6 +235,7 @@ namespace uLog {
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 int uLog::loggerStatus = 0;                    \
+                std::string uLog::logFilename;                 \
                 std::ofstream uLog::microLog_ofs;              \
                 int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
                 int Statistics::highestLevel = 0;              \
@@ -238,12 +248,14 @@ namespace uLog {
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 int uLog::loggerStatus = 0;                    \
+                std::string uLog::logFilename;                 \
                 std::ofstream uLog::microLog_ofs
         #endif
 
         // microLog start:
 
-        #define uLOG_START(logFilename)             \
+        #define uLOG_START(logFilename_)            \
+            uLog::logFilename = logFilename_;       \
             uLog::loggerStatus = 0;                 \
             microLog_ofs.open(logFilename);         \
             if(!microLog_ofs) {                     \
@@ -251,7 +263,8 @@ namespace uLog {
                 std::cerr << "Error opening log file. Cannot produce logs. Check if disk space is available." << std::endl;  \
             }
 
-        #define uLOG_START_APP(logFilename)                         \
+        #define uLOG_START_APP(logFilename_)                        \
+            uLog::logFilename = logFilename_;                       \
             uLog::loggerStatus = 0;                                 \
             microLog_ofs.open(logFilename, std::fstream::app);      \
             if(!microLog_ofs) {                                     \
@@ -362,13 +375,18 @@ namespace uLog {
         inline bool CheckAvailableSpace()
             // Check if the next log message can fit in the remaining available space
         {
+        #if(MICRO_LOG_BOOST == 1)
             //+TODO
             boost::system::error_code errCode;
-            boost::filesystem::space_info space = boost::filesystem::space(logFilename, errCode);
+            boost::filesystem::space_info space = boost::filesystem::space(uLog::logFilename, errCode);
             if(space.available < maxLogSize) {
                 std::cerr << "Logger error: not enough space available in the current partition (" << space.available << " bytes)." << std::endl;
                 return false;
             }
+            else { //+T+
+                std::cout << "Logger info: space available in the current partition (" << space.available << " bytes)." << std::endl;
+            }
+        #endif
             return true;
         }
 
