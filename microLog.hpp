@@ -80,13 +80,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
 //+TODO
 
-    - Error management:
-        . Report an error if the log file cannot be opened.
-        . If an error has been detected, disable logging.
-        - Detect errors when logging, especially the disk full one.
-            http://www.boost.org/doc/libs/1_57_0/libs/filesystem/doc/reference.html#space
-            http://theboostcpplibraries.com/boost.filesystem-files-and-directories#ex.filesystem_13
-
     - Use tabs to separate fields in the logs.
 
     - Complete the code when the logger is disabled.
@@ -97,6 +90,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         - Multithreading/C++11.
         - Multithreading/Boost.
         - On Linux/Windows.
+
+    - Check performance hit due to CheckAvailableSpace(), if any.
 
     - Rolling logs.
         - Let an external utility deal with it.
