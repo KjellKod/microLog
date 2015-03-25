@@ -80,10 +80,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
 //+TODO
 
-    - Use tabs to separate fields in the logs.
-
-    - Complete the code when the logger is disabled.
-
     - Testing.
 
     - Test:
@@ -657,13 +653,9 @@ namespace uLog {
         #define uLOGE                        ""
         #define uLOG_DATE                    if(0) microLog_ofs
         #define uLOG_TITLES(level)           if(0) microLog_ofs
-        #define uLOG_TITLES_(ofs, level)     if(0) ofs
         #define uLOGT(level)                 if(0) microLog_ofs
-        #define uLOGT_(ofs, level)           if(0) ofs
         #define uLOGD(level)                 if(0) microLog_ofs
-        #define uLOGD_(ofs, level)           if(0) ofs
         #define uLOGB(level)                 if(0) microLog_ofs
-        #define uLOGB_(ofs, level)           if(0) ofs
         #define uLOG_LEVEL                   if(0) microLog_ofs
 
         #ifndef MICRO_LOG_DLL
