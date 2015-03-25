@@ -91,7 +91,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     - Rolling logs.
         - Let an external utility deal with it.
-        - Just check there is space on the disk partition.
 
     - Ram-disk: add utility that moves the logs from the ram-disk based log file
         to a hard disk, either at fixed time intervals or when space on the
@@ -114,7 +113,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef MICRO_LOG_HPP
 #define MICRO_LOG_HPP
 
-#define MICRO_LOG_VERSION 7.0.1
+#define MICRO_LOG_VERSION 7.0.2
 
 // Standard threading libraries
 #define MICRO_LOG_SINGLE_THREAD  1
