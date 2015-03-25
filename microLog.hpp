@@ -376,15 +376,11 @@ namespace uLog {
             // Check if the next log message can fit in the remaining available space
         {
         #if(MICRO_LOG_BOOST == 1)
-            //+TODO
             boost::system::error_code errCode;
             boost::filesystem::space_info space = boost::filesystem::space(uLog::logFilename, errCode);
             if(space.available < maxLogSize) {
                 std::cerr << "Logger error: not enough space available in the current partition (" << space.available << " bytes)." << std::endl;
                 return false;
-            }
-            else { //+T+
-                std::cout << "Logger info: space available in the current partition (" << space.available << " bytes)." << std::endl;
             }
         #endif
             return true;
