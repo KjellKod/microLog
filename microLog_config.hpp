@@ -11,9 +11,7 @@
 #ifndef MICRO_LOG_CONFIG_HPP
 #define	MICRO_LOG_CONFIG_HPP
 
-#ifndef MICRO_LOG_ACTIVE
-    #define MICRO_LOG_ACTIVE
-#endif
+//#define MICRO_LOG_ACTIVE
 
 // Minimum log levels for specific code areas:
 

@@ -11,7 +11,6 @@
 
 #ifdef MICRO_LOG_TEST
 
-#define MICRO_LOG_ACTIVE 1
 #include "microLog.hpp"
 
 #include <iostream>

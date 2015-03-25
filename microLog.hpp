@@ -199,6 +199,73 @@ namespace uLog {
 
     static const size_t maxLogSize = 1024;      // max length of a log message (bytes)
 
+    // Run time fields selection
+
+    struct LogFields
+        /// Flags to enable/disable log message fields
+    {
+        static bool time, date, llevel,
+                    exec, pid,
+                    uid, uname,
+                    fileName, filePath, funcName, funcSig,
+                    line, log;
+
+        LogFields() {
+            SetDefault();
+        }
+
+        static void SetDefault() {
+            time = false; date = true;
+            llevel = true;
+            exec = false; pid = false;
+            uid = false; uname = false;
+            fileName = false; filePath = false;
+            funcName = false; funcSig = false; line = false;
+            log = true;
+        }
+
+        static void SetDetailed() {
+            time = true; date = true;
+            llevel = true;
+            exec = true; pid = false;
+            uid = false; uname = false;
+            fileName = false; filePath = false;
+            funcName = false; funcSig = false; line = false;
+            log = true;
+        }
+
+        static void SetSystem() {
+            time = false; date = true;
+            llevel = true;
+            exec = true; pid = true;
+            uid = true; uname = true;
+            fileName = true; filePath = true;
+            funcName = false; funcSig = false; line = false;
+            log = true;
+        }
+
+        static void SetDebug() {
+            time = false; date = false;
+            llevel = true;
+            exec = true; pid = false;
+            uid = false; uname = false;
+            fileName = true; filePath = false;
+            funcName = true; funcSig = false; line = true;
+            log = true;
+        }
+
+        static void SetVerbose() {
+            time = true; date = true;
+            llevel = true;
+            exec = true; pid = true;
+            uid = true; uname = true;
+            fileName = true; filePath = true;
+            funcName = true; funcSig = true; line = true;
+            log = true;
+        }
+    };
+
+
 	#ifdef MICRO_LOG_ACTIVE
 
         // Begin: Platform specific
@@ -381,72 +448,6 @@ namespace uLog {
             return true;
         }
 
-        // Run time fields selection
-
-        struct LogFields
-            /// Flags to enable/disable log message fields
-        {
-            static bool time, date, llevel,
-                        exec, pid,
-                        uid, uname,
-                        fileName, filePath, funcName, funcSig,
-                        line, log;
-
-            LogFields() {
-                SetDefault();
-            }
-
-            static void SetDefault() {
-                time = false; date = true;
-                llevel = true;
-                exec = false; pid = false;
-                uid = false; uname = false;
-                fileName = false; filePath = false;
-                funcName = false; funcSig = false; line = false;
-                log = true;
-            }
-
-            static void SetDetailed() {
-                time = true; date = true;
-                llevel = true;
-                exec = true; pid = false;
-                uid = false; uname = false;
-                fileName = false; filePath = false;
-                funcName = false; funcSig = false; line = false;
-                log = true;
-            }
-
-            static void SetSystem() {
-                time = false; date = true;
-                llevel = true;
-                exec = true; pid = true;
-                uid = true; uname = true;
-                fileName = true; filePath = true;
-                funcName = false; funcSig = false; line = false;
-                log = true;
-            }
-
-            static void SetDebug() {
-                time = false; date = false;
-                llevel = true;
-                exec = true; pid = false;
-                uid = false; uname = false;
-                fileName = true; filePath = false;
-                funcName = true; funcSig = false; line = true;
-                log = true;
-            }
-
-            static void SetVerbose() {
-                time = true; date = true;
-                llevel = true;
-                exec = true; pid = true;
-                uid = true; uname = true;
-                fileName = true; filePath = true;
-                funcName = true; funcSig = true; line = true;
-                log = true;
-            }
-        };
-
         inline std::string LogTime() {
             float t = float(std::clock())/CLOCKS_PER_SEC;
             const size_t sz = 16;
@@ -626,16 +627,23 @@ namespace uLog {
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
                 nullstream uLog::microLog_ofs;                 \
                 int Statistics::nLogs = 0, Statistics::nNoLogs = 0, Statistics::nVerboseLogs = 0, Statistics::nDetailLogs = 0, Statistics::nInfoLogs = 0, Statistics::nWarningLogs = 0, Statistics::nErrorLogs = 0, Statistics::nCriticalLogs = 0, Statistics::nFatalLogs = 0; \
-                int Statistics::highestLevel = 0;
+                int Statistics::highestLevel = 0;              \
+                bool LogFields::time = false, LogFields::date = true, LogFields::llevel = true, LogFields::exec = false, \
+                     LogFields::uid = false, LogFields::uname = false, LogFields::pid = false, \
+                     LogFields::fileName = false, LogFields::filePath = false, LogFields::funcName = false, LogFields::funcSig = false, \
+                     LogFields::line = false, LogFields::log = true
         #else
             #define uLOG_INIT                                  \
                 using namespace uLog;                          \
                 int uLog::minLogLevel = MICRO_LOG_MIN_LEVEL;   \
-                nullstream uLog::microLog_ofs;
+                nullstream uLog::microLog_ofs
         #endif
 
-        #define uLOG_START(logFilename)
-        #define uLOG_START_APP(logFilename)
+        #define uLOG_START(logFilename)                        \
+            std::cout << "Logger disabled." << std::endl
+
+        #define uLOG_START_APP(logFilename)                    \
+            std::cout << "Logger disabled." << std::endl
 
         #ifdef MICRO_LOG_FILE_NAME
             static nullstream microLog_ofs;
@@ -644,13 +652,12 @@ namespace uLog {
             // Define it at global scope and open it (in append mode) before logging.
         #endif
 
+        #define uLOG(level)                  if(0) microLog_ofs
+        #define uLOG_(level, localMinLevel)  if(0) microLog_ofs
+        #define uLOGE                        ""
         #define uLOG_DATE                    if(0) microLog_ofs
         #define uLOG_TITLES(level)           if(0) microLog_ofs
         #define uLOG_TITLES_(ofs, level)     if(0) ofs
-        #define uLOGE                        ""
-        #define uLOG(level)                  if(0) microLog_ofs
-        #define uLOGL(level, localMinLevel)  if(0) microLog_ofs
-        #define uLOG_(ofs, level)            if(0) ofs
         #define uLOGT(level)                 if(0) microLog_ofs
         #define uLOGT_(ofs, level)           if(0) ofs
         #define uLOGD(level)                 if(0) microLog_ofs
