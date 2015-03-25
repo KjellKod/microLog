@@ -499,27 +499,29 @@ namespace uLog {
                 MICRO_LOG_LOCK;                                                 \
                 microLog_ofs                                                    \
                     << (LogFields::time?LogTime():"")                           \
+                    << (LogFields::time?"\t":"")                                \
                     << (LogFields::date?LogDate():"")                           \
+                    << (LogFields::date?"\t":"")                                \
                     << (LogFields::llevel?logLevelTags[level]:"")               \
-                    << (LogFields::llevel?"  ":"")                              \
+                    << (LogFields::llevel?"\t":"")                              \
                     << (LogFields::exec?MICRO_LOG_EXECUTABLE_NAME:"")           \
-                    << (LogFields::exec?"  ":"")                                \
+                    << (LogFields::exec?"\t":"")                                \
                     << (LogFields::pid?GetPID():"")                             \
-                    << (LogFields::pid?"  ":"")                                 \
+                    << (LogFields::pid?"\t":"")                                 \
                     << (LogFields::uid?GetUID():"")                             \
-                    << (LogFields::uid?"  ":"")                                 \
+                    << (LogFields::uid?"\t":"")                                 \
                     << (LogFields::uname?GetUserName():"")                      \
-                    << (LogFields::uname?"  ":"")                               \
+                    << (LogFields::uname?"\t":"")                               \
                     << (LogFields::fileName?(strrchr(__FILE__, MICRO_LOG_DIR_SLASH) ? strrchr(__FILE__, MICRO_LOG_DIR_SLASH) + 1 : __FILE__):"")  \
-                    << (LogFields::fileName?"  ":"")                            \
+                    << (LogFields::fileName?"\t":"")                            \
                     << (LogFields::filePath?__FILE__:"")                        \
-                    << (LogFields::filePath?"  ":"")                            \
+                    << (LogFields::filePath?"\t":"")                            \
                     << (LogFields::funcName?__func__:"")                        \
-                    << (LogFields::funcName?"  ":"")                            \
+                    << (LogFields::funcName?"\t":"")                            \
                     << (LogFields::funcSig?__PRETTY_FUNCTION__:"")              \
-                    << (LogFields::funcSig?"  ":"")                             \
+                    << (LogFields::funcSig?"\t":"")                             \
                     << (LogFields::line?std::to_string(__LINE__):"")            \
-                    << (LogFields::line?"  ":"")                                \
+                    << (LogFields::line?"\t":"")                                \
                     << ": "
 
         #define uLOG(level)  uLOG_(level, nolog)
@@ -529,18 +531,18 @@ namespace uLog {
                 MICRO_LOG_LOCK;                                                 \
                 microLog_ofs                                                    \
                     << bar << "\n"                                              \
-                    << (LogFields::time?"Time  ":"")                            \
-                    << (LogFields::date?"Date  ":"")                            \
-                    << (LogFields::llevel?"Level  ":"")                         \
-                    << (LogFields::exec?"Executable  ":"")                      \
-                    << (LogFields::pid?"PID  ":"")                              \
-                    << (LogFields::uid?"UID  ":"")                              \
-                    << (LogFields::uname?"User  ":"")                           \
-                    << (LogFields::fileName?"Filename  ":"")                    \
-                    << (LogFields::filePath?"Filepath  ":"")                    \
-                    << (LogFields::funcName?"Function  ":"")                    \
-                    << (LogFields::funcSig?"Function_signature  ":"")           \
-                    << (LogFields::line?"Line  ":"")                            \
+                    << (LogFields::time?"Time\t":"")                            \
+                    << (LogFields::date?"Date\t":"")                            \
+                    << (LogFields::llevel?"Level\t":"")                         \
+                    << (LogFields::exec?"Executable\t":"")                      \
+                    << (LogFields::pid?"PID\t":"")                              \
+                    << (LogFields::uid?"UID\t":"")                              \
+                    << (LogFields::uname?"User\t":"")                           \
+                    << (LogFields::fileName?"Filename\t":"")                    \
+                    << (LogFields::filePath?"Filepath\t":"")                    \
+                    << (LogFields::funcName?"Function\t":"")                    \
+                    << (LogFields::funcSig?"Function_signature\t":"")           \
+                    << (LogFields::line?"Line\t":"")                            \
                     << "\n" << bar << endm;                                     \
                 MICRO_LOG_UNLOCK
 
