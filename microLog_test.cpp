@@ -91,6 +91,10 @@ int main()
     logLevelVar = error;
     uLOG_(info, logLevelVar) << "Test variable log threshold " << 2 << uLOGE;
 
+    // Test with custom log file
+    std::ofstream custom_ofs("/Volumes/ramdisk/custom.log");
+    uLOG_TITLES_S(custom_ofs, warning);
+    uLOGS(custom_ofs, warning) << "Test log on a different file." << uLOGE;
 
 
     uLog::Statistics::Log();

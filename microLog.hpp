@@ -80,6 +80,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
 //+TODO
 
+    . Allow to have multiple log files in the same program.
+        - Allow to have multiple settings for each log file.
+
     - Testing.
 
     - Test:
@@ -490,10 +493,10 @@ namespace uLog {
         }
 
 
-        #define uLOG_(level, localMinLevel)                                     \
+        #define uLOGS_(logstream, level, localMinLevel)                         \
             if(CheckLogLevel(level, localMinLevel) && CheckAvailableSpace())    \
                 MICRO_LOG_LOCK;                                                 \
-                microLog_ofs                                                    \
+                logstream                                                       \
                     << (LogFields::time?LogTime():"")                           \
                     << (LogFields::date?LogDate():"")                           \
                     << (LogFields::llevel?logLevelTags[level]:"")               \
@@ -518,12 +521,17 @@ namespace uLog {
                     << (LogFields::line?"  ":"")                                \
                     << ": "
 
-        #define uLOG(level)  uLOG_(level, nolog)
+        #define uLOGS(logstream, level)  uLOGS_(logstream, level, nolog)
 
-        #define uLOG_TITLES(level)                                              \
+        #define uLOG_(level, localMinLevel)  uLOGS_(microLog_ofs, level, localMinLevel)
+
+        #define uLOG(level)  uLOGS_(microLog_ofs, level, nolog)
+
+
+        #define uLOG_TITLES_S(logstream, level)                                 \
             if(CheckLogLevel(level))                                            \
                 MICRO_LOG_LOCK;                                                 \
-                microLog_ofs                                                    \
+                logstream                                                       \
                     << bar << "\n"                                              \
                     << (LogFields::time?"Time  ":"")                            \
                     << (LogFields::date?"Date  ":"")                            \
@@ -539,6 +547,9 @@ namespace uLog {
                     << (LogFields::line?"Line  ":"")                            \
                     << "\n" << bar << endm;                                     \
                 MICRO_LOG_UNLOCK
+
+        #define uLOG_TITLES(level)  uLOG_TITLES_S(microLog_ofs, level)
+
 
         // uLOG log terminator
         #define uLOGE endm; MICRO_LOG_UNLOCK
