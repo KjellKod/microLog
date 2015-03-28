@@ -33,6 +33,7 @@ namespace uLog {
         logInfo = nolog;
     static int
         logLevelVar = detail;
+    static const char separator[] = "\t";
 }
 
 #ifndef MICRO_LOG_EXECUTABLE_NAME

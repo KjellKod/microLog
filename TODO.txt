@@ -1,7 +1,5 @@
 microLog - TODO
 
-	- Use a separator for the fields of the log message (default=tab). Used by log viewers to tokenize the message.
-
 	- Testing:
 		- Multithreading/C++11.
 		- Multithreading/Boost.
