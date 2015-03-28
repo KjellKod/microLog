@@ -12,7 +12,7 @@
  *   E-mail:    pietrom16@gmail.com
  */
 
-/* microLog is distributed under the following BSD license:
+/* microLog is distributed under the following 3-clause BSD license:
 
 Copyright (c) 2011-2015, Pietro Mele
 All rights reserved.
