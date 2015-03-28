@@ -1,6 +1,6 @@
 # microLog
 
-#### - Single header logger.
+#### - Single header logger (27 KB only).
 #### - Three log level thresholds, to tune verbosity on a global and local level.
 
 Distinctive features:
@@ -15,7 +15,7 @@ Because it can be useful to focus on specific parts of a project, setting differ
 
 Other features:
 
-- A single file project (a header file).
+- A single file project.
 - There are no implementation files, so makefiles do not have to be touched.
 - Thread safe (C++11 threads, Boost threads or pthread).
 - It can be used when no debugger nor other logging system is available.
@@ -28,3 +28,6 @@ Other features:
 For better performance, consider logging to a ramdisk (TODO: external utility that periodically copies the log file from ramdisk to hard disk).
 
 Usage: See microLog_test.cpp as an example.
+
+If these features are not enough for you, I suggest this other, much more advanced, logger: [G3log](https://bitbucket.org/KjellKod/g3log)
+
