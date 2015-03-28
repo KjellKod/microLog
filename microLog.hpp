@@ -76,47 +76,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         MICRO_LOG_MIN_LEVEL   to set a minimum log level below which the logger call will not be added.
 */
 
-
-/*
-//+TODO
-
-    . Allow to have multiple log files in the same program.
-        - Allow to have multiple settings for each log file.
-
-    - Testing.
-
-    - Test:
-        - Multithreading/C++11.
-        - Multithreading/Boost.
-        - On Linux/Windows.
-
-    - Check performance hit due to CheckAvailableSpace(), if any.
-
-    - Rolling logs.
-        - Let an external utility deal with it.
-
-    - Ram-disk: add utility that moves the logs from the ram-disk based log file
-        to a hard disk, either at fixed time intervals or when space on the
-        ram-disk falls below a certain threshold.
-
-    Low priority:
-    - Add log levels based on function names.
-    - Make microLog as compatible as possible (regarding logging syntax) with g3log.
-    - Store all the required details in a bit mask parameter.
-    - In Windows, DLLs have troubles with static variables. Now static variables are removed when dealing with DLLs. Use dllexport/dllimport to fix this issue.
-    - Log to multiple different log files simultaneously, with different log levels, details, ...
-        - Tipically one of these files will be on ram-disk.
-        - This can be done by an external utility (log server) which 
-          gets the log from the logger and then copies it to the different log files.
-          Pros: this makes the logger independent from the log files structure, and 
-                allows to have the performance heavy task of dealing with the file
-                system to another executable.
-*/
-
 #ifndef MICRO_LOG_HPP
 #define MICRO_LOG_HPP
 
-#define MICRO_LOG_VERSION "7.0.2"
+#define MICRO_LOG_VERSION "7.0.3"
 
 // Standard threading libraries
 #define MICRO_LOG_SINGLE_THREAD  1
