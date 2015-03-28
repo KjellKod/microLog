@@ -19,15 +19,20 @@
     #define MICRO_LOG_MIN_LEVEL nolog
 #endif
 
+#define MICRO_LOG_LEVEL1 warning
+#define MICRO_LOG_LEVEL2 detail
+
 namespace uLog {
     static const int
+        logConstLevel1 = warning,
+        logConstLevel2 = detail,
         logGPSolver = detail,
         logQSExperiment = info,
         logQSSolverForCompleteCarModel = detail,
         logRootNewton = info,
         logInfo = nolog;
     static int
-        logLevelVar = info;
+        logLevelVar = detail;
 }
 
 #ifndef MICRO_LOG_EXECUTABLE_NAME

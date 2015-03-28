@@ -116,7 +116,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef MICRO_LOG_HPP
 #define MICRO_LOG_HPP
 
-#define MICRO_LOG_VERSION 7.0.2
+#define MICRO_LOG_VERSION "7.0.2"
 
 // Standard threading libraries
 #define MICRO_LOG_SINGLE_THREAD  1
@@ -237,7 +237,7 @@ namespace uLog {
             llevel = true;
             exec = true; pid = true;
             uid = true; uname = true;
-            fileName = true; filePath = true;
+            fileName = true; filePath = false;
             funcName = false; funcSig = false; line = false;
             log = true;
         }
@@ -257,8 +257,8 @@ namespace uLog {
             llevel = true;
             exec = true; pid = true;
             uid = true; uname = true;
-            fileName = true; filePath = true;
-            funcName = true; funcSig = true; line = true;
+            fileName = false; filePath = true;
+            funcName = false; funcSig = true; line = true;
             log = true;
         }
     };
