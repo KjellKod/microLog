@@ -16,7 +16,7 @@
 
 /* microLog is distributed under the following BSD license:
 
-Copyright (c) 2011-2014, Pietro Mele
+Copyright (c) 2011-2015, Pietro Mele
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
