@@ -1,10 +1,8 @@
 /**  microLog.hpp
  *
- *   Version 6.2.0
- *   2014.11.09
- *
- *   It was the smallest logger in the universe ...
- *   ... but it still fits in a single header ;-)
+ *   A light, compact, fast logger. It allows to set different minimal log levels for
+ *   different kinds of logs, allowing to focus on specific areas of the code during
+ *   debugging.
  *
  *   This is the only file needed to generate logs, plus a user written logger's 
  *   configuration file named: "microLog_config.hpp".
