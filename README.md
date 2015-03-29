@@ -29,7 +29,7 @@ For better performance, consider logging to a ramdisk (TODO: external utility th
 
 Requirements:  
 - Built in single threaded mode: C++03 only.  
-- Built in multithreading mode: C++03 and Boost or C++11 only.  
+- Built in multithreading mode: C++03 and Boost, or C++11 only.  
 
 Usage: See microLog_test.cpp as an example.
 
